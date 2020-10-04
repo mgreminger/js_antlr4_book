@@ -1,10 +1,9 @@
 grammar Rows;
 
 @parser::members { // add members to generated RowsParser
-    int col;
-    public RowsParser(TokenStream input, int col) { // custom constructor
-        this(input);
-        this.col = col;
+    this.col = 1 // default col is 1
+    this.setCol = function (col){
+        this.col = col
     }
 }
 
@@ -15,7 +14,9 @@ locals [int i=0]
     : (   STUFF
           {
           $i++;
-          if ( $i == col ) System.out.println($STUFF.text);
+          if ( $i == this.col ){
+              console.log($STUFF.text);
+          }
           }
       )+
     ;

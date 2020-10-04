@@ -1,9 +1,13 @@
 package-lock.json
 node_modules
 
+.vscode
+
 *.tokens
 *.interp
 *Parser.js
 *Lexer.js
+.antlr
 
 tour/LabeledExprVisitor.js
+
