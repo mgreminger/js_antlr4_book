@@ -1,2 +1,9 @@
 package-lock.json
 node_modules
+
+*.tokens
+*.interp
+*Parser.js
+*Lexer.js
+
+tour/LabeledExprVisitor.js
