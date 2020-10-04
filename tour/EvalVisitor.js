@@ -1,4 +1,4 @@
-const LabelExprVisitor = require('./LabeledExprVisitor').LabeledExprVisitor
+const LabelExprVisitor = require('./LabeledExprVisitor.js').LabeledExprVisitor
 const LabeledExprParser = require('./LabeledExprParser.js').LabeledExprParser
 
 class EvalVisitor extends LabelExprVisitor {
