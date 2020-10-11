@@ -53,6 +53,13 @@ function processInput(){
             printToken(token)
         }
     }
+
+    if (program.Tree){
+        const parser = new grammarParser(tokens)
+        const tree = parser[startingRule]()
+        console.log(tree.toStringTree([startingRule]))
+    }
+
 }
 
 
