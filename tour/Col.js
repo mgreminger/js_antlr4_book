@@ -3,7 +3,6 @@
 const fs = require('fs')
 
 const antlr4 = require('antlr4')
-const { parse } = require('path')
 const RowsLexer = require('./RowsLexer.js').RowsLexer
 const RowsParser = require('./RowsParser.js').RowsParser
 
