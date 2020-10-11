@@ -1,3 +1,4 @@
+// node Calc.js t.expr
 const fs = require('fs')
 
 const antlr4 = require('antlr4')
