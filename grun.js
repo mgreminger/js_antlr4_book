@@ -20,7 +20,7 @@ const cwd = process.cwd()
 const GrammarLexer = require(`${cwd}/${grammarName}Lexer.js`)[`${grammarName}Lexer`]
 const GrammarParser = require(`${cwd}/${grammarName}Parser.js`)[`${grammarName}Parser`]
 
-let inputData = null
+let inputData
 
 if (program.args.length <= 2) {
   // no file provided, read input from stdin
@@ -35,11 +35,6 @@ if (program.args.length <= 2) {
   processInput()
 }
 
-function printToken (token) {
-  const t = token
-  console.log(`[@${t.tokenIndex},${t.start}:${t.stop}='${t.text}',<${t.type}>,${t.line}:${t.column}]`)
-}
-
 function processInput () {
   const input = new antlr4.InputStream(inputData)
   const lexer = new GrammarLexer(input)
@@ -48,9 +43,7 @@ function processInput () {
   tokens.fill()
 
   if (program.Tokens) {
-    for (const token of tokens.tokens) {
-      printToken(token)
-    }
+    tokens.tokens.forEach(printToken)
   }
 
   if (program.Tree) {
@@ -58,4 +51,9 @@ function processInput () {
     const tree = parser[startingRule]()
     console.log(tree.toStringTree([startingRule]))
   }
+}
+
+function printToken (token) {
+  const t = token
+  console.log(`[@${t.tokenIndex},${t.start}:${t.stop}='${t.text}',<${t.type}>,${t.line}:${t.column}]`)
 }
