@@ -20,22 +20,20 @@ const cwd = process.cwd()
 const GrammarLexer = require(`${cwd}/${grammarName}Lexer.js`)[`${grammarName}Lexer`]
 const GrammarParser = require(`${cwd}/${grammarName}Parser.js`)[`${grammarName}Parser`]
 
-let inputData
-
 if (program.args.length <= 2) {
   // no file provided, read input from stdin
-  inputData = ''
+  let inputData = ''
   process.stdin.on('data', function (data) {
     inputData = inputData.concat(data)
   })
-  process.stdin.on('end', processInput)
+  process.stdin.on('end', function () { processInput(inputData) })
 } else {
   // file name provided, use as input
-  inputData = fs.readFileSync(program.args[2], { encoding: 'ascii' })
-  processInput()
+  const inputData = fs.readFileSync(program.args[2], { encoding: 'ascii' })
+  processInput(inputData)
 }
 
-function processInput () {
+function processInput (inputData) {
   const input = new antlr4.InputStream(inputData)
   const lexer = new GrammarLexer(input)
   const tokens = new antlr4.CommonTokenStream(lexer)
