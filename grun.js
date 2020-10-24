@@ -47,7 +47,7 @@ function processInput (inputData) {
   if (program.Tree) {
     const parser = new GrammarParser(tokens)
     const tree = parser[startingRule]()
-    console.log(tree.toStringTree([startingRule]))
+    console.log(tree.toStringTree(parser.ruleNames))
   }
 }
 
