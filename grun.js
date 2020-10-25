@@ -8,6 +8,7 @@ const program = new Command()
 program
   .option('-tokens', 'Print out a list of tokens')
   .option('-tree', 'Print out the parse tree')
+  .option('-gui', 'Visualize tree')
   .arguments('<grammar-name> <start-rule-name> [input-filename...]')
 
 program.parse(process.argv)
@@ -44,14 +45,41 @@ function processInput (inputData) {
     tokens.tokens.forEach(printToken)
   }
 
-  if (program.Tree) {
+  if (program.Tree || program.Gui) {
     const parser = new GrammarParser(tokens)
     const tree = parser[startingRule]()
-    console.log(tree.toStringTree(parser.ruleNames))
+    if (program.Tree) {
+      console.log(tree.toStringTree(parser.ruleNames))
+    } else if (program.Gui) {
+      console.log(JSON.stringify(getTreeObject(tree)))
+    }
   }
 }
 
 function printToken (token) {
   const t = token
   console.log(`[@${t.tokenIndex},${t.start}:${t.stop}='${t.text}',<${t.type}>,${t.line}:${t.column}]`)
+}
+
+function getTreeObject (treeSource) {
+  const ruleNames = treeSource.parser.ruleNames
+
+  function addNode (sourceNode) {
+    const targetNode = {}
+    if (sourceNode.children) {
+      // rule node
+      targetNode.name = ruleNames[sourceNode.ruleIndex]
+      targetNode.children = []
+      for (const child of sourceNode.children) {
+        targetNode.children.push(addNode(child))
+      }
+    } else {
+      // token node (leaf)
+      targetNode.name = sourceNode.getText()
+    }
+    return targetNode
+  }
+
+  // perform a depth first recursion
+  return addNode(treeSource)
 }
