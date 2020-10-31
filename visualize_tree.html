@@ -1,0 +1,78 @@
+<html>
+<head>
+<script src="https://d3js.org/d3.v6.min.js"></script>
+</head>
+<body>
+<div class="container"></div>
+
+<script>
+
+function tree(data, width) {
+    const root = d3.hierarchy(data);
+    root.dx = 10;
+    root.dy = width / (root.height + 1);
+    return d3.tree().nodeSize([root.dx, root.dy])(root);
+}
+
+function drawTree(container, data, width=954){
+
+    const root = tree(data, width);
+
+    let x0 = Infinity;
+    let x1 = -x0;
+    root.each(d => {
+    if (d.x > x1) x1 = d.x;
+    if (d.x < x0) x0 = d.x;
+    });
+
+    const svg = d3.select(container).append('svg')
+        .attr("viewBox", [0, 0, width, x1 - x0 + root.dx * 2]);
+
+    const g = svg.append("g")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", 10)
+        .attr("transform", `translate(${root.dy / 3},${root.dx - x0})`);
+    
+    const link = g.append("g")
+    .attr("fill", "none")
+    .attr("stroke", "#555")
+    .attr("stroke-opacity", 0.4)
+    .attr("stroke-width", 1.5)
+    .selectAll("path")
+    .data(root.links())
+    .join("path")
+        .attr("d", d3.linkHorizontal()
+            .x(d => d.y)
+            .y(d => d.x));
+
+    const node = g.append("g")
+        .attr("stroke-linejoin", "round")
+        .attr("stroke-width", 3)
+    .selectAll("g")
+    .data(root.descendants())
+    .join("g")
+        .attr("transform", d => `translate(${d.y},${d.x})`);
+
+    node.append("circle")
+        .attr("fill", d => d.children ? "#555" : "#999")
+        .attr("r", 2.5);
+
+    node.append("text")
+        .attr("dy", "0.31em")
+        .attr("x", d => d.children ? -6 : 6)
+        .attr("text-anchor", d => d.children ? "end" : "start")
+        .text(d => d.data.name)
+    .clone(true).lower()
+        .attr("stroke", "white");
+
+    return svg.node();
+
+}
+
+const data = {"name":"file","children":[{"name":"hdr","children":[{"name":"row","children":[{"name":"field","children":[{"name":"Details"}]},{"name":","},{"name":"field","children":[{"name":"Month"}]},{"name":","},{"name":"field","children":[{"name":"Amount"}]},{"name":"\n"}]}]},{"name":"row","children":[{"name":"field","children":[{"name":"Mid Bonus"}]},{"name":","},{"name":"field","children":[{"name":"June"}]},{"name":","},{"name":"field","children":[{"name":"\"$2,000\""}]},{"name":"\n"}]},{"name":"row","children":[{"name":""},{"name":","},{"name":"field","children":[{"name":"January"}]},{"name":","},{"name":"field","children":[{"name":"\"\"\"zippo\"\"\""}]},{"name":"\n"}]},{"name":"row","children":[{"name":"field","children":[{"name":"Total Bonuses"}]},{"name":","},{"name":"field","children":[{"name":"\"\""}]},{"name":","},{"name":"field","children":[{"name":"\"$5,000\""}]},{"name":"\n"}]}]};
+
+drawTree('.container',data)
+      
+</script>
+</body>
+</html>
