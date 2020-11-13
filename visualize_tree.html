@@ -69,9 +69,14 @@ function drawTree(container, data, width=954){
 
 }
 
-const data = {"name":"file","children":[{"name":"hdr","children":[{"name":"row","children":[{"name":"field","children":[{"name":"Details"}]},{"name":","},{"name":"field","children":[{"name":"Month"}]},{"name":","},{"name":"field","children":[{"name":"Amount"}]},{"name":"\n"}]}]},{"name":"row","children":[{"name":"field","children":[{"name":"Mid Bonus"}]},{"name":","},{"name":"field","children":[{"name":"June"}]},{"name":","},{"name":"field","children":[{"name":"\"$2,000\""}]},{"name":"\n"}]},{"name":"row","children":[{"name":""},{"name":","},{"name":"field","children":[{"name":"January"}]},{"name":","},{"name":"field","children":[{"name":"\"\"\"zippo\"\"\""}]},{"name":"\n"}]},{"name":"row","children":[{"name":"field","children":[{"name":"Total Bonuses"}]},{"name":","},{"name":"field","children":[{"name":"\"\""}]},{"name":","},{"name":"field","children":[{"name":"\"$5,000\""}]},{"name":"\n"}]}]};
+fetch('/tree')
+    .then(response => response.json())
+    .then(tree => {
+        drawTree('.container', tree)
+    })
 
-drawTree('.container',data)
+//const data = {"name":"file","children":[{"name":"hdr","children":[{"name":"row","children":[{"name":"field","children":[{"name":"Details"}]},{"name":","},{"name":"field","children":[{"name":"Month"}]},{"name":","},{"name":"field","children":[{"name":"Amount"}]},{"name":"\n"}]}]},{"name":"row","children":[{"name":"field","children":[{"name":"Mid Bonus"}]},{"name":","},{"name":"field","children":[{"name":"June"}]},{"name":","},{"name":"field","children":[{"name":"\"$2,000\""}]},{"name":"\n"}]},{"name":"row","children":[{"name":""},{"name":","},{"name":"field","children":[{"name":"January"}]},{"name":","},{"name":"field","children":[{"name":"\"\"\"zippo\"\"\""}]},{"name":"\n"}]},{"name":"row","children":[{"name":"field","children":[{"name":"Total Bonuses"}]},{"name":","},{"name":"field","children":[{"name":"\"\""}]},{"name":","},{"name":"field","children":[{"name":"\"$5,000\""}]},{"name":"\n"}]}]};
+//drawTree('.container',data)
       
 </script>
 </body>

@@ -1,4 +1,8 @@
+const http = require('http')
 const fs = require('fs')
+const path = require('path')
+const url = require('url')
+const open = require('open')
 
 const antlr4 = require('antlr4')
 
@@ -51,7 +55,7 @@ function processInput (inputData) {
     if (program.Tree) {
       console.log(tree.toStringTree(parser.ruleNames))
     } else if (program.Gui) {
-      console.log(JSON.stringify(getTreeObject(tree)))
+      serveGUI(getTreeObject(tree))
     }
   }
 }
@@ -82,4 +86,25 @@ function getTreeObject (treeSource) {
 
   // perform a depth first recursion
   return addNode(treeSource)
+}
+
+function serveGUI (treeObject) {
+  const guiHTML = fs.readFileSync(path.resolve(__dirname, 'visualize_tree.html'))
+
+  const server = new http.Server()
+  server.listen(8080)
+
+  server.on('request', (request, response) => {
+    const pathname = url.parse(request.url).pathname
+
+    if (pathname === '/') {
+      response.writeHead(200, { 'Content-Type': 'text/html' }).end(guiHTML)
+    } else if (pathname !== '/tree' || request.method !== 'GET') {
+      response.writeHead(404).end()
+    } else {
+      response.writeHead(200, { 'Content-Type': 'application/json' }).end(JSON.stringify(treeObject))
+    }
+  })
+
+  open('http://localhost:8080/')
 }
