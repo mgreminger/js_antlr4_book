@@ -99,10 +99,15 @@ function serveGUI (treeObject) {
 
     if (pathname === '/') {
       response.writeHead(200, { 'Content-Type': 'text/html' }).end(guiHTML)
-    } else if (pathname !== '/tree' || request.method !== 'GET') {
+    } else if ((pathname !== '/tree' && pathname !== '/finished') || request.method !== 'GET') {
       response.writeHead(404).end()
-    } else {
-      response.writeHead(200, { 'Content-Type': 'application/json' }).end(JSON.stringify(treeObject))
+    } else if (pathname === '/tree') {
+      response.writeHead(200, { 'Content-Type': 'application/json' })
+        .end(JSON.stringify(treeObject))
+    } else if (pathname === '/finished') {
+      // client is finished loading, we can exit this process
+      response.end()
+      process.exit()
     }
   })
 

@@ -1,11 +1,17 @@
 <html>
 <head>
+<meta charset="utf-8">
 <script src="https://d3js.org/d3.v6.min.js"></script>
 </head>
 <body>
 <div class="container"></div>
 
 <script>
+
+window.addEventListener('load', function(){
+    // content loaded, notify grun process so that it can exit
+    fetch('/finished')
+})
 
 function tree(data, width) {
     const root = d3.hierarchy(data);
