@@ -106,8 +106,7 @@ function serveGUI (treeObject) {
         .end(JSON.stringify(treeObject))
     } else if (pathname === '/finished') {
       // client is finished loading, we can exit this process
-      response.end()
-      process.exit()
+      response.end(process.exit)
     }
   })
 
