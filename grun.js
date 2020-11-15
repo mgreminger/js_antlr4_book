@@ -111,14 +111,16 @@ function serveGUI (treeObject) {
 
     if (pathname === '/') {
       response.writeHead(200, { 'Content-Type': 'text/html' }).end(guiHTML)
-    } else if ((pathname !== '/tree' && pathname !== '/finished') || request.method !== 'GET') {
-      response.writeHead(404).end()
-    } else if (pathname === '/tree') {
+    } if (pathname === '/tree' && request.method === 'GET') {
+      // client is requesting json representation of tree
       response.writeHead(200, { 'Content-Type': 'application/json' })
         .end(JSON.stringify(treeObject))
-    } else if (pathname === '/finished') {
+    } if (pathname === '/finished' && request.method === 'GET') {
       // client is finished loading, we can exit this process
       response.end(process.exit)
+    } else {
+      // unrecognized requeset
+      response.writeHead(404).end()
     }
   })
 
