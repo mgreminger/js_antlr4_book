@@ -79,13 +79,25 @@ function getTreeObject (treeSource) {
       }
     } else {
       // token node (leaf)
-      targetNode.name = sourceNode.getText()
+      if (sourceNode.ruleIndex) {
+        // leaf happens to be a rule
+        targetNode.name = ruleNames[sourceNode.ruleIndex]
+      } else {
+        // leaf is a token
+        targetNode.name = replaceWhitespace(sourceNode.getText())
+      }
     }
     return targetNode
   }
 
   // perform a depth first recursion
   return addNode(treeSource)
+}
+
+function replaceWhitespace (input) {
+  // Replace white space with printable characters since white space is often tokens
+  // at the leaves of the parse tree
+  return input.replace('\n', '\\n').replace('\t', '\\t').replace('\f', '\\f')
 }
 
 function serveGUI (treeObject) {
