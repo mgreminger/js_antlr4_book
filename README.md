@@ -5,6 +5,6 @@ I'm working through some of the [The Definitive ANTLR4 Reference [1]](https://pr
 
 # grun.js
 The grun test rig referenced in the book has been partially reimplemented in JavaScript as grun.js. The output of the -gui option of grun.js applied to the CSV example from Section 6.1 of the book is shown below.
-![grun.js tree rendering](example_tree.png)
+![grun.js tree rendering](example_tree.svg)
 
 
