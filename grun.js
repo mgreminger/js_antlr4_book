@@ -1,15 +1,18 @@
 #!/usr/bin/env node
 
-const http = require('http')
-const fs = require('fs')
-const path = require('path')
-const url = require('url')
-const open = require('open')
+import http from 'http';
+import fs from 'fs';
+import path from 'path';
+import url from 'url';
+import open from 'open';
 
-const antlr4 = require('antlr4')
+import antlr4 from 'antlr4';
 
-const { Command } = require('commander')
-const program = new Command()
+import { Command } from 'commander';
+
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
+
+const program = new Command();
 
 program
   .option('-tokens', 'Print out a list of tokens')
@@ -24,8 +27,11 @@ const startingRule = program.args[1]
 
 const cwd = process.cwd()
 
-const GrammarLexer = require(`${cwd}/${grammarName}Lexer.js`)[`${grammarName}Lexer`]
-const GrammarParser = require(`${cwd}/${grammarName}Parser.js`)[`${grammarName}Parser`]
+let GrammarLexer = await import(`${cwd}/${grammarName}Lexer.js`);
+GrammarLexer = GrammarLexer.default;
+
+let GrammarParser = await import(`${cwd}/${grammarName}Parser.js`);
+GrammarParser = GrammarParser.default;
 
 if (program.args.length <= 2) {
   // no file provided, read input from stdin
