@@ -14,3 +14,7 @@ tour/LabeledExprVisitor.js
 install/HelloListener.js
 
 examples/CSVListener.js
+examples/CymbolListener.js
+examples/DOTListener.js
+examples/JSONListener.js
+examples/RListener.js
