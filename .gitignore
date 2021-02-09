@@ -10,6 +10,7 @@ node_modules
 .antlr
 
 tour/LabeledExprVisitor.js
+tour/ExprListener.js
 
 install/HelloListener.js
 
@@ -20,3 +21,4 @@ examples/JSONListener.js
 examples/RListener.js
 
 listeners/PropertyFileListener.js
+listeners/PropertyFileVisitor.js
