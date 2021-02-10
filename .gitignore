@@ -25,3 +25,4 @@ listeners/PropertyFileVisitor.js
 listeners/LExprVisitor.js
 listeners/LExprListener.js
 listeners/CSVListener.js
+listeners/JSONListener.js
