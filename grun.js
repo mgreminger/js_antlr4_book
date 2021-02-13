@@ -57,15 +57,15 @@ function processInput (inputData) {
     tokens.tokens.forEach(printToken)
   }
 
-  if (program.Tree || program.Gui) {
-    const parser = new GrammarParser(tokens)
-    const tree = parser[startingRule]()
-    if (program.Tree) {
-      console.log(tree.toStringTree(parser.ruleNames))
-    } else if (program.Gui) {
-      serveGUI(getTreeObject(tree))
-    }
+  const parser = new GrammarParser(tokens)
+  const tree = parser[startingRule]()
+
+  if (program.Tree) {
+    console.log(tree.toStringTree(parser.ruleNames))
+  } else if (program.Gui) {
+    serveGUI(getTreeObject(tree))
   }
+
 }
 
 function printToken (token) {
