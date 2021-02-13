@@ -18,6 +18,7 @@ program
   .option('-tokens', 'Print out a list of tokens')
   .option('-tree', 'Print out the parse tree')
   .option('-gui', 'Visualize tree')
+  .option('-diagnostics', 'Use diagnostic error listener')
   .arguments('<grammar-name> <start-rule-name> [input-filename...]')
 
 program.parse(process.argv)
@@ -58,6 +59,13 @@ function processInput (inputData) {
   }
 
   const parser = new GrammarParser(tokens)
+
+  if (program.Diagnostics) {
+    // parser.removeErrorListeners();
+    parser.addErrorListener(new antlr4.error.DiagnosticErrorListener());
+    parser._interp.predictionMode = antlr4.atn.PredictionMode.LL_EXACT_AMBIG_DETECTION;
+  }
+
   const tree = parser[startingRule]()
 
   if (program.Tree) {
