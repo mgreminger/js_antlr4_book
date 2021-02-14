@@ -3,8 +3,8 @@ grammar Call;
 stat:   fcall ';' ;
 fcall
     :   ID '(' expr ')'
-    |   ID '(' expr ')' ')' {notifyErrorListeners("Too many parentheses");}
-    |   ID '(' expr         {notifyErrorListeners("Missing closing ')'");}
+    |   ID '(' expr ')' ')' {this.notifyErrorListeners("Too many parentheses");}
+    |   ID '(' expr         {this.notifyErrorListeners("Missing closing ')'");}
     ;
 
 expr:   '(' expr ')'
