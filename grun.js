@@ -86,6 +86,10 @@ function getTreeObject (treeSource) {
 
   function addNode (sourceNode) {
     const targetNode = {}
+    if (sourceNode instanceof antlr4.tree.ErrorNode ||
+        sourceNode instanceof antlr4.tree.ErrorNodeImpl) {
+          targetNode.error = true;
+        }
     if (sourceNode.children) {
       // rule node
       targetNode.name = ruleNames[sourceNode.ruleIndex]
