@@ -66,6 +66,10 @@ function processInput (inputData) {
     parser._interp.predictionMode = antlr4.atn.PredictionMode.LL_EXACT_AMBIG_DETECTION;
   }
 
+  if (program.Tree || program.Gui) {
+    parser.buildParseTrees = true;
+  }
+
   const tree = parser[startingRule]()
 
   if (program.Tree) {
