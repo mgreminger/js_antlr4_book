@@ -1,45 +1,44 @@
 grammar CSV;
 
-@header {
-import java.util.*;
-}
 
 /** Derived from rule "file : hdr row+ ;" */
 file
-locals [int i=0]
+locals [i=0]
      : hdr ( rows+=row[$hdr.text.split(",")] {$i++;} )+
        {
-       System.out.println($i+" rows");
-       for (RowContext r : $rows) {
-           System.out.println("row token interval: "+r.getSourceInterval());
+       console.log  ($i+" rows");
+       for (const r of $rows) {
+           console.log("row token interval: "+r.getSourceInterval());
        }
        }
      ;
 
-hdr : row[null] {System.out.println("header: '"+$text.trim()+"'");} ;
+hdr : row[null] {console.log("header: '"+$text.trim()+"'");} ;
 
 /** Derived from rule "row : field (',' field)* '\r'? '\n' ;" */
-row[String[] columns] returns [Map<String,String> values]
-locals [int col=0]
+row[columns] returns [values]
+locals [col=0]
 @init {
-    $values = new HashMap<String,String>();
+    $values = new Map();
 }
 @after {
-    if ($values!=null && $values.size()>0) {
-        System.out.println("values = "+$values);
+    if ($values !== null && $values.size > 0) {
+        const valuesObject = {};
+        $values.forEach((value, key) => (valuesObject[key] = value));
+        console.log("values = " + JSON.stringify(valuesObject));
     }
 }
 // rule row cont'd...
     :   field
         {
-        if ($columns!=null) {
-            $values.put($columns[$col++].trim(), $field.text.trim());
+        if ($columns !== null) {
+            $values.set($columns[$col++].trim(), $field.text.trim());
         }
         }
         (   ',' field
             {
-            if ($columns!=null) {
-                $values.put($columns[$col++].trim(), $field.text.trim());
+            if ($columns !== null) {
+                $values.set($columns[$col++].trim(), $field.text.trim());
             }
             }
         )* '\r'? '\n'
