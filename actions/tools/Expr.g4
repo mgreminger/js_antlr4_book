@@ -1,39 +1,36 @@
 /** Grammar from tour chapter augmented with actions */
 grammar Expr;
 
-@header {
-package tools;
-import java.util.*;
-}
+// @header {
+
+// }
 
 @parser::members {
-    /** "memory" for our calculator; variable/value pairs go here */
-    Map<String, Integer> memory = new HashMap<String, Integer>();
+    this.memory = new Map();
 
-    int eval(int left, int op, int right) {
+    this.eval = function (left, op, right) {
         switch ( op ) {
-            case MUL : return left * right;
-            case DIV : return left / right;
-            case ADD : return left + right;
-            case SUB : return left - right;
+            case ExprParser.MUL : return left * right;
+            case ExprParser.DIV : return left / right;
+            case ExprParser.ADD : return left + right;
+            case ExprParser.SUB : return left - right;
         }
-        return 0;
     }
 }
 
-stat:   e NEWLINE           {System.out.println($e.v);}
-    |   ID '=' e NEWLINE    {memory.put($ID.text, $e.v);}
+stat:   e NEWLINE           {console.log($e.v);}
+    |   ID '=' e NEWLINE    {this.memory.set($ID.text, $e.v);}
     |   NEWLINE                   
     ;
 
 e returns [int v]
-    : a=e op=('*'|'/') b=e  {$v = eval($a.v, $op.type, $b.v);}
-    | a=e op=('+'|'-') b=e  {$v = eval($a.v, $op.type, $b.v);}  
+    : a=e op=('*'|'/') b=e  {$v = this.eval($a.v, $op.type, $b.v);}
+    | a=e op=('+'|'-') b=e  {$v = this.eval($a.v, $op.type, $b.v);}  
     | INT                   {$v = $INT.int;}    
     | ID
       {
-      String id = $ID.text;
-      $v = memory.containsKey(id) ? memory.get(id) : 0;
+      const id = $ID.text;
+      $v = this.memory.has(id) ? this.memory.get(id) : 0;
       }
     | '(' e ')'             {$v = $e.v;}       
     ; 
