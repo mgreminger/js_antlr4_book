@@ -15,9 +15,9 @@ member
     ;
 
 stat:   expr ';'
-        {console.log("found expr: "+$ctx.getText());}
+        {console.log("found expr: "+$text);}
     |   ID '=' expr ';'
-        {console.log("found assign: "+$ctx.getText());}
+        {console.log("found assign: "+$text);}
     ;
 
 expr:   INT 
