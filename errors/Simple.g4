@@ -4,14 +4,14 @@ prog:   classDef+ ; // match one or more class definitions
 
 classDef
     :   'class' ID '{' member+ '}' // a class has one or more members
-        {console.log("class "+$ctx.ID().toString());}
+        {console.log("class "+$ID.text);}
     ;
 
 member
     :   'int' ID ';'                       // field definition
-        {console.log("var "+$ctx.ID().toString());}
+        {console.log("var "+$ID.text);}
     |   'int' f=ID '(' ID ')' '{' stat '}' // method definition
-        {console.log("method: "+$ctx.f.text);}
+        {console.log("method: "+$f.text);}
     ;
 
 stat:   expr ';'
