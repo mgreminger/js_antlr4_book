@@ -11,6 +11,7 @@ node_modules
 
 tour/LabeledExprVisitor.js
 tour/ExprListener.js
+tour/JavaListener.js
 
 install/HelloListener.js
 
@@ -35,3 +36,4 @@ actions/tools/ExprListener.js
 
 lexmagic/CymbolListener.js
 lexmagic/PredKeywordListener.js
+lexmagic/IDKeywordListener.js
