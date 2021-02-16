@@ -34,3 +34,4 @@ errors/CallListener.js
 actions/tools/ExprListener.js
 
 lexmagic/CymbolListener.js
+lexmagic/PredKeywordListener.js

@@ -1,8 +1,12 @@
 grammar PredKeyword;
 
+@lexer::members { 
+    this.HIDDEN = 1;
+}
+
 prog: stat+ ;
 
-stat: keyIF expr stat
+stat: keyIF expr keyTHEN stat
     | keyCALL ID ';'
     | ';'
     ;
@@ -10,9 +14,11 @@ stat: keyIF expr stat
 expr: ID
     ;
 
-keyIF : {_input.LT(1).getText().equals("if")}? ID ;
+keyIF : {this._input.LT(1).text === "if"}? ID ;
 
-keyCALL : {_input.LT(1).getText().equals("call")}? ID ;
+keyCALL : {this._input.LT(1).text === "call"}? ID ;
+
+keyTHEN : {this._input.LT(1).text === "then"}? ID ;
 
 ID : 'a'..'z'+ ;
-WS : (' '|'\n')+ {setChannel(HIDDEN);} ;
+WS : (' '|'\n')+ {this._channel = this.HIDDEN;} ;
