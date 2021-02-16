@@ -1,7 +1,7 @@
 grammar CppStat;
 
-stat:   decl ';'  {System.out.println("decl "+$decl.text);}
-    |   expr ';'  {System.out.println("expr "+$expr.text);}
+stat:   decl ';'  {console.log("decl "+$decl.text);}
+    |   expr ';'  {console.log("expr "+$expr.text);}
     ;
 
 decl:   ID ID           // E.g., "Point p"
