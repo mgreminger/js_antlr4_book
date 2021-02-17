@@ -4,9 +4,28 @@
 <script src="https://d3js.org/d3.v6.min.js"></script>
 </head>
 <body>
-<div class="container"></div>
+    <button onclick="zoomOut()">Zoom Out</button>
+    <button onclick="zoomIn()">Zoom In</button>
+    <div class="container"></div>
+</body>
+</html>
 
 <script>
+
+let data;
+let width = 1000;
+
+function zoomIn() {
+    if (width > 400) {
+        width -= 200;
+        drawTree('.container', data, width, true)
+    }
+}
+
+function zoomOut() {
+    width += 200;
+    drawTree('.container', data, width, true)
+}
 
 window.addEventListener('load', function(){
     // content loaded, notify grun process so that it can exit
@@ -20,7 +39,7 @@ function tree(data, width) {
     return d3.tree().nodeSize([root.dx, root.dy])(root);
 }
 
-function drawTree(container, data, width=954){
+function drawTree(container, data, width, update=false){
 
     const root = tree(data, width);
 
@@ -31,7 +50,12 @@ function drawTree(container, data, width=954){
         if (d.x < x0) x0 = d.x;
     });
 
+    if (update) {
+        d3.select(".tree-container").remove();
+    }
+
     const svg = d3.select(container).append('svg')
+        .classed("tree-container", true)
         .attr("viewBox", [0, 0, width, x1 - x0 + root.dx * 2]);
 
     const g = svg.append("g")
@@ -79,9 +103,8 @@ function drawTree(container, data, width=954){
 fetch('/tree')
     .then(response => response.json())
     .then(tree => {
-        drawTree('.container', tree)
+        data = tree;
+        drawTree('.container', tree, width)
     })
       
 </script>
-</body>
-</html>
