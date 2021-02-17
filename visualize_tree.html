@@ -1,110 +1,114 @@
 <html>
-<head>
-<meta charset="utf-8">
-<script src="https://d3js.org/d3.v6.min.js"></script>
-</head>
-<body>
+  <head>
+    <meta charset="utf-8" />
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+  </head>
+  <body>
     <button onclick="zoomOut()">Zoom Out</button>
     <button onclick="zoomIn()">Zoom In</button>
     <div class="container"></div>
-</body>
+  </body>
 </html>
 
 <script>
+  let data;
+  let width = 1000;
 
-let data;
-let width = 1000;
-
-function zoomIn() {
+  function zoomIn() {
     if (width > 400) {
-        width -= 200;
-        drawTree('.container', data, width, true)
+      width -= 200;
+      drawTree(".container", data, width, true);
     }
-}
+  }
 
-function zoomOut() {
+  function zoomOut() {
     width += 200;
-    drawTree('.container', data, width, true)
-}
+    drawTree(".container", data, width, true);
+  }
 
-window.addEventListener('load', function(){
-    // content loaded, notify grun process so that it can exit
-    fetch('/finished')
-})
-
-function tree(data, width) {
+  function tree(data, width) {
     const root = d3.hierarchy(data);
     root.dx = 10;
     root.dy = width / (root.height + 1);
     return d3.tree().nodeSize([root.dx, root.dy])(root);
-}
+  }
 
-function drawTree(container, data, width, update=false){
-
+  function drawTree(container, data, width, update = false) {
     const root = tree(data, width);
 
     let x0 = Infinity;
     let x1 = -x0;
-    root.each(d => {
-        if (d.x > x1) x1 = d.x;
-        if (d.x < x0) x0 = d.x;
+    root.each((d) => {
+      if (d.x > x1) x1 = d.x;
+      if (d.x < x0) x0 = d.x;
     });
 
     if (update) {
-        d3.select(".tree-container").remove();
+      d3.select(".tree-container").remove();
     }
 
-    const svg = d3.select(container).append('svg')
-        .classed("tree-container", true)
-        .attr("viewBox", [0, 0, width, x1 - x0 + root.dx * 2]);
+    const svg = d3
+      .select(container)
+      .append("svg")
+      .classed("tree-container", true)
+      .attr("viewBox", [0, 0, width, x1 - x0 + root.dx * 2]);
 
-    const g = svg.append("g")
-        .attr("font-family", "sans-serif")
-        .attr("font-size", 10)
-        .attr("transform", `translate(${root.dy / 3},${root.dx - x0})`);
-    
-    const link = g.append("g")
-        .attr("fill", "none")
-        .attr("stroke", "#555")
-        .attr("stroke-opacity", 0.4)
-        .attr("stroke-width", 1.5)
-        .selectAll("path")
-        .data(root.links())
-        .join("path")
-        .attr("d", d3.linkHorizontal()
-        .x(d => d.y)
-        .y(d => d.x));
+    const g = svg
+      .append("g")
+      .attr("font-family", "sans-serif")
+      .attr("font-size", 10)
+      .attr("transform", `translate(${root.dy / 3},${root.dx - x0})`);
 
-    const node = g.append("g")
-        .attr("stroke-linejoin", "round")
-        .attr("stroke-width", 3)
-        .selectAll("g")
-        .data(root.descendants())
-        .join("g")
-        .attr("transform", d => `translate(${d.y},${d.x})`);
+    const link = g
+      .append("g")
+      .attr("fill", "none")
+      .attr("stroke", "#555")
+      .attr("stroke-opacity", 0.4)
+      .attr("stroke-width", 1.5)
+      .selectAll("path")
+      .data(root.links())
+      .join("path")
+      .attr(
+        "d",
+        d3
+          .linkHorizontal()
+          .x((d) => d.y)
+          .y((d) => d.x)
+      );
 
-    node.append("circle")
-        .attr("fill", d => d.children ? "#555" : "#999")
-        .attr("r", 2.5);
+    const node = g
+      .append("g")
+      .attr("stroke-linejoin", "round")
+      .attr("stroke-width", 3)
+      .selectAll("g")
+      .data(root.descendants())
+      .join("g")
+      .attr("transform", (d) => `translate(${d.y},${d.x})`);
 
-    node.append("text")
-        .attr("fill", d => d.data.error ? "red" : "black")
-        .attr("dy", "0.31em")
-        .attr("x", d => d.children ? -6 : 6)
-        .attr("text-anchor", d => d.children ? "end" : "start")
-        .text(d => d.data.name)
-        .clone(true).lower()
-        .attr("stroke", "white");
+    node
+      .append("circle")
+      .attr("fill", (d) => (d.children ? "#555" : "#999"))
+      .attr("r", 2.5);
+
+    node
+      .append("text")
+      .attr("fill", (d) => (d.data.error ? "red" : "black"))
+      .attr("dy", "0.31em")
+      .attr("x", (d) => (d.children ? -6 : 6))
+      .attr("text-anchor", (d) => (d.children ? "end" : "start"))
+      .text((d) => d.data.name)
+      .clone(true)
+      .lower()
+      .attr("stroke", "white");
 
     return svg.node();
+  }
 
-}
-
-fetch('/tree')
-    .then(response => response.json())
-    .then(tree => {
-        data = tree;
-        drawTree('.container', tree, width)
+  fetch("/tree")
+    .then((response) => response.json())
+    .then((tree) => {
+      data = tree;
+      drawTree(".container", tree, width);
     })
-      
+    .then(() => fetch("/finished")); // content loaded, notify grun.js process so that it can exit
 </script>

@@ -19,7 +19,8 @@ program
   .option("-tree", "Print out the parse tree")
   .option("-gui", "Visualize tree")
   .option("-diagnostics", "Use diagnostic error listener")
-  .option("-encoding <encoding>")
+  .option("-encoding <encoding>", "Encoding when suppling input file. Default is ascii")
+  .option("-port <port>", "Port to use for -gui option, default is 8080")
   .arguments("<grammar-name> <start-rule-name> [input-filename...]");
 
 program.parse(process.argv);
@@ -90,7 +91,8 @@ function processInput(inputData) {
   if (program.Tree) {
     console.log(tree.toStringTree(parser.ruleNames));
   } else if (program.Gui) {
-    serveGUI(getTreeObject(tree));
+    let port = program.Port ? parseInt(program.Port) : 8080;
+    serveGUI(getTreeObject(tree), port);
   }
 }
 
@@ -144,13 +146,13 @@ function replaceWhitespace(input) {
   return input.replace("\n", "\\n").replace("\t", "\\t").replace("\f", "\\f");
 }
 
-function serveGUI(treeObject) {
+function serveGUI(treeObject, port) {
   const guiHTML = fs.readFileSync(
     path.resolve(__dirname, "visualize_tree.html")
   );
 
   const server = new http.Server();
-  server.listen(8080);
+  server.listen(port);
 
   server.on("request", (request, response) => {
     const pathname = request.url;
@@ -173,5 +175,5 @@ function serveGUI(treeObject) {
     }
   });
 
-  open("http://localhost:8080/");
+  open(`http://localhost:${port}/`);
 }
