@@ -19,7 +19,7 @@ program
   .option("-tree", "Print out the parse tree")
   .option("-gui", "Visualize tree")
   .option("-diagnostics", "Use diagnostic error listener")
-  .option("-encoding <encoding>", "Encoding when suppling input file. Default is ascii")
+  .option("-encoding <encoding>", "Encoding when reading input file. Default is ascii")
   .option("-port <port>", "Port to use for -gui option, default is 8080")
   .arguments("<grammar-name> <start-rule-name> [input-filename...]");
 
