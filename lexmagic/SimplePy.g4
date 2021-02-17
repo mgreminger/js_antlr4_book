@@ -2,7 +2,7 @@
 grammar SimplePy;
 
 @lexer::members {
-    int nesting = 0;
+    this.nesting = 0;
 }
 
 file:   stat+ EOF ;
@@ -30,17 +30,17 @@ ID  :   [a-zA-Z_] [a-zA-Z_0-9]* ;
 
 INT :   [0-9]+ ;
 
-LPAREN    : '(' {nesting++;} ;
+LPAREN    : '(' {this.nesting++;} ;
 
-RPAREN    : ')' {nesting--;} ;
+RPAREN    : ')' {this.nesting--;} ;
 
-LBRACK    : '[' {nesting++;} ;
+LBRACK    : '[' {this.nesting++;} ;
 
-RBRACK    : ']' {nesting--;} ;
+RBRACK    : ']' {this.nesting--;} ;
 
 /** Nested newline within a (..) or [..] are ignored. */
 IGNORE_NEWLINE
-    :   '\r'? '\n' {nesting>0}? -> skip
+    :   '\r'? '\n' {this.nesting>0}? -> skip
     ;
 
 /** A logical newline that ends a statement */

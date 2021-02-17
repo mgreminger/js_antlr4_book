@@ -37,3 +37,4 @@ actions/tools/ExprListener.js
 lexmagic/CymbolListener.js
 lexmagic/PredKeywordListener.js
 lexmagic/IDKeywordListener.js
+lexmagic/SimplePyListener.js
