@@ -83,7 +83,8 @@ function processInput (inputData) {
 function printToken (token) {
   const t = token
   const c = t.channel !== 0? 'channel='+t.channel+',' : '';
-  console.log(`[@${t.tokenIndex},${t.start}:${t.stop}='${t.text}',<${t.type}>,${c}${t.line}:${t.column}]`)
+  const text = replaceWhitespace(t.text)
+  console.log(`[@${t.tokenIndex},${t.start}:${t.stop}='${text}',<${t.type}>,${c}${t.line}:${t.column}]`)
 }
 
 function getTreeObject (treeSource) {
