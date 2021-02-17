@@ -153,7 +153,7 @@ function serveGUI(treeObject) {
   server.listen(8080);
 
   server.on("request", (request, response) => {
-    const pathname = url.parse(request.url).pathname;
+    const pathname = request.url;
 
     if (pathname === "/") {
       response.writeHead(200, { "Content-Type": "text/html" }).end(guiHTML);
