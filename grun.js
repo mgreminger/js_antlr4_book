@@ -18,7 +18,10 @@ program
   .option("-tree", "Print out the parse tree")
   .option("-gui", "Visualize tree")
   .option("-diagnostics", "Use diagnostic error listener")
-  .option("-encoding <encoding>", "Encoding when reading input file. Default is ascii")
+  .option(
+    "-encoding <encoding>",
+    "Encoding when reading input file. Default is ascii"
+  )
   .option("-port <port>", "Port to use for -gui option, default is 8080")
   .arguments("<grammar-name> <start-rule-name> [input-filename...]");
 
@@ -99,8 +102,16 @@ function printToken(token) {
   const t = token;
   const c = t.channel !== 0 ? "channel=" + t.channel + "," : "";
   const text = replaceWhitespace(t.text);
+  let tokenName;
+  if (t.type === antlr4.Token.EOF) {
+    tokenName = "EOF";
+  } else {
+    tokenName = GrammarLexer.literalNames[t.type]
+      ? GrammarLexer.literalNames[t.type]
+      : GrammarLexer.symbolicNames[t.type];
+  }
   console.log(
-    `[@${t.tokenIndex},${t.start}:${t.stop}='${text}',<${t.type}>,${c}${t.line}:${t.column}]`
+    `[@${t.tokenIndex},${t.start}:${t.stop}='${text}',<${tokenName}>,${c}${t.line}:${t.column}]`
   );
 }
 
@@ -142,7 +153,10 @@ function getTreeObject(treeSource) {
 function replaceWhitespace(input) {
   // Replace white space with printable characters since white space is often tokens
   // at the leaves of the parse tree
-  return input.replace("\n", "\\n").replace("\t", "\\t").replace("\f", "\\f");
+  return input
+    .replace(/\n/g, "\\n")
+    .replace(/\t/g, "\\t")
+    .replace(/\f/g, "\\f");
 }
 
 function serveGUI(treeObject, port) {
