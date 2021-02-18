@@ -32,6 +32,13 @@ const startingRule = program.args[1];
 
 const cwd = process.cwd();
 
+if (!grammarName || !startingRule) {
+  console.log(
+    "Must specify grammar name and starting rule name. Run with --help option for more details"
+  );
+  process.exit();
+}
+
 let GrammarLexer = await import(`${cwd}/${grammarName}Lexer.js`).catch(() => {
   console.log(
     `Unable to import ${grammarName}Lexer.js. Did you forget to run antlr4 with the -Dlanguage=JavaScript option?`
@@ -51,6 +58,7 @@ GrammarParser = GrammarParser.default;
 if (program.args.length <= 2) {
   // no file provided, read input from stdin
   let inputData = "";
+  console.log("Waiting for input, to finish, use ctrl-D...")
   process.stdin.on("data", function (data) {
     inputData = inputData.concat(data);
   });
