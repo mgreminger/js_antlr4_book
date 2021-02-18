@@ -20,7 +20,7 @@ program
   .option("-diagnostics", "Use diagnostic error listener")
   .option(
     "-encoding <encoding>",
-    "Encoding when reading input file. Default is ascii"
+    "Encoding when reading input file. Default is utf8"
   )
   .option("-port <port>", "Port to use for -gui option, default is 8080")
   .arguments("<grammar-name> <start-rule-name> [input-filename...]");
@@ -59,7 +59,7 @@ if (program.args.length <= 2) {
   });
 } else {
   // file name provided, use as input
-  let encoding = program.Encoding ? program.Encoding : "ascii";
+  let encoding = program.Encoding ? program.Encoding : "utf8";
   const inputData = fs.readFileSync(program.args[2], { encoding: encoding });
   processInput(inputData);
 }
