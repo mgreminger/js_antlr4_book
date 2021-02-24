@@ -38,3 +38,4 @@ lexmagic/CymbolListener.js
 lexmagic/PredKeywordListener.js
 lexmagic/IDKeywordListener.js
 lexmagic/SimplePyListener.js
+lexmagic/ModeTagsParserListener.js
